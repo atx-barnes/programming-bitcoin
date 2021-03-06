@@ -4,37 +4,23 @@ using System;
 using UnityEngine;
 using System.Numerics;
 
-public class ECC : MonoBehaviour
-{
-    private void Start() {
-
-        FieldElement a = new FieldElement(3, 13);
-
-        FieldElement b = new FieldElement(12, 13);
-
-        FieldElement c = new FieldElement(10, 13);
-
-        print(a * c == b);
-    }
-}
-
 /// <summary>
-/// 
+/// Field element class.
 /// </summary>
 public class FieldElement {
 
     /// <summary>
-    /// 
+    /// Integer field element.
     /// </summary>
     public int Num;
 
     /// <summary>
-    /// 
+    /// Field size.
     /// </summary>
     public int Prime;
 
     /// <summary>
-    /// 
+    /// Constructor for field element.
     /// </summary>
     /// <param name="num"></param>
     /// <param name="prime"></param>
@@ -44,14 +30,14 @@ public class FieldElement {
     }
 
     /// <summary>
-    /// 
+    /// Initialize field element once instantiated or also to pass back instance after operation.
     /// </summary>
     /// <param name="num"></param>
     /// <param name="prime"></param>
     /// <returns></returns>
     public FieldElement Intitialize(int num, int prime) {
 
-        if (num >= prime || num < 0) { throw new UnityException($"Num {num} not in field range 0 to {prime - 1}"); }
+        if (num >= prime || num < 0) { throw new Exception($"Num {num} not in field range 0 to {prime - 1}"); }
 
         Num = num;
 
@@ -61,7 +47,7 @@ public class FieldElement {
     }
 
     /// <summary>
-    /// 
+    /// Check to see if two elements are equal.
     /// </summary>
     /// <param name="self"></param>
     /// <param name="other"></param>
@@ -69,7 +55,7 @@ public class FieldElement {
     public static bool operator ==(FieldElement self, FieldElement other) => self.Num == other.Num && self.Prime == other.Prime;
 
     /// <summary>
-    /// 
+    /// Check to see if two elements are not equal.
     /// </summary>
     /// <param name="self"></param>
     /// <param name="other"></param>
@@ -77,14 +63,14 @@ public class FieldElement {
     public static bool operator !=(FieldElement self, FieldElement other) => self.Num != other.Num && self.Prime != other.Prime;
 
     /// <summary>
-    /// Finite field addition operation.
+    /// Overloaded finite field addition operation.
     /// </summary>
     /// <param name="self"></param>
     /// <param name="other"></param>
     /// <returns></returns>
     public static FieldElement operator +(FieldElement self, FieldElement other) {
 
-        if(self.Prime != other.Prime) { throw new UnityException("Cannot add two numbers in different Fields"); }
+        if (self.Prime != other.Prime) { throw new Exception("Cannot add two numbers in different Fields"); }
 
         int num = Mod(self.Num + other.Num, self.Prime);
 
@@ -92,14 +78,14 @@ public class FieldElement {
     }
 
     /// <summary>
-    /// Finite field substraction operation.
+    /// Overloaded finite field substraction operation.
     /// </summary>
     /// <param name="self"></param>
     /// <param name="other"></param>
     /// <returns></returns>
     public static FieldElement operator -(FieldElement self, FieldElement other) {
 
-        if (self.Prime != other.Prime) { throw new UnityException("Cannot substract two numbers in different Fields"); }
+        if (self.Prime != other.Prime) { throw new Exception("Cannot substract two numbers in different Fields"); }
 
         int num = Mod(self.Num - other.Num, self.Prime);
 
@@ -107,14 +93,14 @@ public class FieldElement {
     }
 
     /// <summary>
-    /// Finite field multiplication operation.
+    /// Overloaded finite field multiplication operation.
     /// </summary>
     /// <param name="self"></param>
     /// <param name="other"></param>
     /// <returns></returns>
     public static FieldElement operator *(FieldElement self, FieldElement other) {
 
-        if (self.Prime != other.Prime) { throw new UnityException("Cannot multiple two numbers in different Fields"); }
+        if (self.Prime != other.Prime) { throw new Exception("Cannot multiple two numbers in different Fields"); }
 
         int num = Mod(self.Num * other.Num, self.Prime);
 
@@ -122,7 +108,7 @@ public class FieldElement {
     }
 
     /// <summary>
-    /// Finite field exponentiation operation.
+    /// Overloaded finite field exponentiation operation.
     /// </summary>
     /// <param name="self"></param>
     /// <param name="exponent"></param>
@@ -137,14 +123,14 @@ public class FieldElement {
     }
 
     /// <summary>
-    /// Finite field division operation.
+    /// Overloaded finite field division operation.
     /// </summary>
     /// <param name="self"></param>
     /// <param name="other"></param>
     /// <returns></returns>
     public static FieldElement operator /(FieldElement self, FieldElement other) {
 
-        if(self.Prime != other.Prime) { throw new UnityException("Cannot divide two numbers in different Fields"); }
+        if (self.Prime != other.Prime) { throw new Exception("Cannot divide two numbers in different Fields"); }
 
         int num = Mod(self.Num * (int)BigInteger.ModPow(other.Num, self.Prime - 2, self.Prime), self.Prime);
 
